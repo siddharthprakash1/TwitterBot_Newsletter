@@ -9,10 +9,12 @@ class ViralContentCreationTasks:
                 released or published in the past 1 month.
                 
                 Compile this information into a structured list of content items. 
-                Each item should include a brief description (1-2 lines max) and relevance score 
-                to guide content sharing efforts around these new resources. 
+                Each item should include a very very brief description (1-2 lines max) and relevance score 
+                to guide content sharing efforts around these new resources and also inlucde the link of the resource. 
                 Ensure the final list is clear, actionable, and ready to inform strategic 
-                content curation."""),
+                content curation.
+                Also remember there is limit on tokens per minute cannot be more than 6000 tokens per minute.
+                """),
             expected_output="List of new content items in the format: [item1, item2, ...]",
             agent=agent
         )
@@ -20,15 +22,17 @@ class ViralContentCreationTasks:
     def content_research(self, agent, niche):
         return Task(
             description=dedent(f"""\
-                Do brief research on all the new content items (articles, repos, tutorials).
+                Do a very brief research on all the new content items (articles, repos, tutorials).
                 For each item related to {niche}, gather:
                     - A one-sentence summary of the item's significance.
-                    - The source link (article URL, GitHub repo link, or YouTube video link).
+                    - The source link (article URL, GitHub repo link, or YouTube video link) this is mandatory.
                     - One key takeaway or interesting fact from the content.
                     
                 Compile these details for each item, keeping in mind the 250-character limit for tweets.
-                        
-                Maximum number of google searches you can do is 10."""),
+                Also remember there is limit on tokens per minute cannot be more than 6000 tokens per minute.
+                Maximum number of google searches you can do is 10.
+                The source link (article URL, GitHub repo link, or YouTube video link)  is mandatory.
+                """),
             expected_output=dedent(f"""\
                         A map of content items to structured research details for that item.
                         This report will serve as a foundation 

@@ -103,7 +103,7 @@ content_researcher_agent = agents.content_researcher_agent()
 creative_agent = agents.creative_content_creator_agent()
 
 # Create Tasks
-niche = "Langchain"
+niche = "Llama LLM models"
 topic_analysis = tasks.topic_analysis(trending_topic_researcher_agent, niche)
 content_research = tasks.content_research(content_researcher_agent, niche)
 twitter_posts = tasks.create_twitter_posts(creative_agent, niche)
@@ -121,7 +121,8 @@ crew = Crew(
         twitter_posts
     ],
     process=Process.sequential,
-    verbose=True
+    verbose=True,
+    max_rpm=3
 )
 
 result = crew.kickoff()
