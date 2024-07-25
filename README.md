@@ -1,4 +1,4 @@
-# LLaMA3-70B Powered AI Content Curator for GenAI, LangChain, and CrewAI 🚀
+# LLaMA3-70B Powered AI Content Curator for X in GenAI, LangChain, and CrewAI 🚀
 
 Welcome to the **LLaMA3-70B AI Content Curator** project. This advanced system leverages the powerful LLaMA3-70B model through the Groq API to discover, analyze, and share cutting-edge content in Generative AI, LangChain, and CrewAI. Stay updated with the latest developments by following our curator bot [@AiBuzzDaily](https://x.com/AiBuzzDaily) on X (formerly Twitter).
 
