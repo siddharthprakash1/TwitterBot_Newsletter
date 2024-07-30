@@ -11,26 +11,29 @@ from crewai.process import Process
 from tasks import ViralContentCreationTasks
 from agents import ViralContentCreators
 
-# Load environment variables
+# Load environment variables from a .env file
 load_dotenv()
 
-# Define necessary constants
+# Define necessary constants from environment variables
 MODEL = os.getenv('MODEL')
 if not MODEL:
     raise ValueError("MODEL environment variable is not set.")
+
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 TWITTER_API_KEY = os.getenv('TWITTER_API_KEY')
 TWITTER_API_SECRET_KEY = os.getenv('TWITTER_API_SECRET_KEY')
 ACCESS_TOKEN = os.getenv('TWITTER_ACCESS_TOKEN')
 ACCESS_TOKEN_SECRET = os.getenv('TWITTER_ACCESS_TOKEN_SECRET')
-BEARER_TOKEN = os.getenv('TWITTER_BEARER_TOKEN')
+BEARER_TOKEN = os.getenv('TWITTER_BEARE_TOKEN')
 
+# Ensure all necessary environment variables are set
 if not all([GROQ_API_KEY, TWITTER_API_KEY, TWITTER_API_SECRET_KEY, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, BEARER_TOKEN]):
     raise ValueError("One or more Twitter API keys/secrets are not set.")
 
-# Initialize Groq client
+# Initialize Groq client for generating tweets
 groqClient = Groq(api_key=GROQ_API_KEY)
 
+# Function to extract tweets from content using a language model
 def get_tweets_from_llm(content):
     chat_completion = groqClient.chat.completions.create(
         messages=[
@@ -76,6 +79,7 @@ def get_tweets_from_llm(content):
         print("No valid JSON array found in the response.")
         return []
 
+# Function to post a tweet using the Twitter API
 def process_tweet(tweet):
     client = tweepy.Client(
         bearer_token=BEARER_TOKEN,
@@ -95,20 +99,20 @@ def process_tweet(tweet):
         print("Error during tweeting:", e)
         return e
 
-# Create Agents
+# Initialize the agents for creating viral content
 tasks = ViralContentCreationTasks()
 agents = ViralContentCreators()
 trending_topic_researcher_agent = agents.trending_topic_researcher_agent()
 content_researcher_agent = agents.content_researcher_agent()
 creative_agent = agents.creative_content_creator_agent()
 
-# Create Tasks
+# Create tasks for the agents
 niche = "Llama LLM models"
 topic_analysis = tasks.topic_analysis(trending_topic_researcher_agent, niche)
 content_research = tasks.content_research(content_researcher_agent, niche)
 twitter_posts = tasks.create_twitter_posts(creative_agent, niche)
 
-# Create Crew
+# Create a Crew to manage the agents and tasks
 crew = Crew(
     agents=[
         trending_topic_researcher_agent,
@@ -125,20 +129,22 @@ crew = Crew(
     max_rpm=3
 )
 
+# Kick off the process and get the result
 result = crew.kickoff()
 print("Crew usage", crew.usage_metrics)
 
-# Print results
+# Print the result of the process
 print("\n\n########################")
 print("## Here is the result")
 print("########################\n")
 print(result)
 
+# Extract tweets from the result using the LLM
 tweets = get_tweets_from_llm(result)
 print("tweets: ")
 print(tweets)
 
-# Process each tweet
+# Process each tweet to post on Twitter
 for tweet in tweets:
     print(tweet)
     process_tweet(tweet)
